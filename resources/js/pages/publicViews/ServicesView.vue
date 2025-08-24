@@ -1,22 +1,27 @@
 <template>
-    <HeadComponent :headInfo="headInfo"></HeadComponent>
+    <HeadComponent :head-info="headInfo" />
     <div class="row">
         <div
             class="col-md-4 mb-4"
-            v-for="(service, index) in services"
-            :key="index"
+            v-for="service in services"
+            :key="service.id"
         >
             <div class="card text-center mb-4 border-0">
                 <div class="card-body bg-light">
                     <div class="icon-container mx-auto">
                         <Icon
                             :name="service.icon"
-                            :customParameters="iconParameters"
-                        ></Icon>
+                            :custom-parameters="iconParameters"
+                        />
                     </div>
                     <h4 class="card-title my-3">{{ service.title }}</h4>
-                    <p class="card-text">{{ service.text }}</p>
+                    <p class="card-text">{{ service.description }}</p>
                 </div>
+            </div>
+        </div>
+        <div v-if="error" class="col-12">
+            <div class="alert alert-danger text-center">
+                {{ error }}
             </div>
         </div>
     </div>
@@ -25,44 +30,13 @@
 <script setup>
 import HeadComponent from "../../components/HeadComponent.vue";
 import Icon from "../../components/Icon.vue";
+import { fetchServices } from "../../api/useServices";
+import { onMounted, ref } from "vue";
 
 const headInfo = {
     title: "Servicios",
     subtitle: "Somos Expertos en Seguridad y Confort",
 };
-
-const services = [
-    {
-        icon: "shield",
-        title: "Seguridad",
-        text: "Protegemos lo que más valoras con sistemas de seguridad avanzados y soluciones personalizadas.",
-    },
-    {
-        icon: "home",
-        title: "Domótica",
-        text: "Transformamos tu hogar en un espacio inteligente y conectado para mayor comodidad y eficiencia.",
-    },
-    {
-        icon: "video",
-        title: "Videovigilancia",
-        text: "Monitoreo constante con tecnología de punta para garantizar la seguridad de tus espacios.",
-    },
-    {
-        icon: "wifi",
-        title: "Redes",
-        text: "Diseñamos e implementamos redes robustas y seguras para mantenerte siempre conectado.",
-    },
-    {
-        icon: "cloud",
-        title: "Nube",
-        text: "Soluciones en la nube que optimizan el almacenamiento y acceso a tus datos desde cualquier lugar.",
-    },
-    {
-        icon: "smartphone",
-        title: "Móviles",
-        text: "Desarrollamos aplicaciones móviles personalizadas para mejorar la interacción y experiencia del usuario.",
-    },
-];
 
 const iconParameters = {
     color: "white",
@@ -72,6 +46,18 @@ const iconParameters = {
     height: "80",
     display: "block",
 };
+
+const services = ref([]);
+const error = ref(null);
+
+onMounted(async () => {
+    try {
+        services.value = await fetchServices();
+    } catch (err) {
+        error.value = "No se pudieron cargar los servicios. Intenta más tarde.";
+        console.error('Error fetching services:', err);
+    }
+});
 </script>
 
 <style scoped>
