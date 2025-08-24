@@ -1,12 +1,12 @@
 <template>
     <nav
         class="navbar navbar-expand-lg fixed-top px-4 py-3"
-        :class="{ 'bg-dark': !homeRoute }"
-        v-if="!adminRoute"
+        :class="{ 'bg-dark': !isHome }"
+        v-if="!isAdmin"
     >
         <div class="container">
             <router-link class="navbar-brand m-0" to="/"
-                ><img :src="logo" alt="Logo"
+                ><img :src="logoImg" alt="Logo"
             /></router-link>
             <span class="navbar-toggler">
                 <button
@@ -19,64 +19,23 @@
                     aria-label="Toggle navigation"
                 >
                     Menú
-                    <span v-html="menuIcon"></span>
+                    <Icon name="menu" :custom-parameters="iconParameters" />
                 </button>
             </span>
 
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav text-uppercase ms-auto custom-link">
-                    <li class="nav-item">
+                    <li
+                        v-for="(link, index) in navLinks"
+                        :key="index"
+                        class="nav-item"
+                    >
                         <router-link
                             class="nav-link"
-                            to="/services"
+                            to="{{ link.url }}"
                             exact-active-class="text-primary"
                         >
-                            Servicios
-                        </router-link>
-                    </li>
-                    <li class="nav-item">
-                        <router-link
-                            class="nav-link"
-                            to="/products"
-                            exact-active-class="text-primary"
-                        >
-                            Productos
-                        </router-link>
-                    </li>
-                    <li class="nav-item">
-                        <router-link
-                            class="nav-link"
-                            to="/catalogue"
-                            exact-active-class="text-primary"
-                        >
-                            Catálogo
-                        </router-link>
-                    </li>
-                    <li class="nav-item">
-                        <router-link
-                            class="nav-link"
-                            to="/about"
-                            exact-active-class="text-primary"
-                        >
-                            Nosotros
-                        </router-link>
-                    </li>
-                    <li class="nav-item">
-                        <router-link
-                            class="nav-link"
-                            to="/locations"
-                            exact-active-class="text-primary"
-                        >
-                            Ubicaciones
-                        </router-link>
-                    </li>
-                    <li class="nav-item">
-                        <router-link
-                            class="nav-link"
-                            to="/contact"
-                            exact-active-class="text-primary"
-                        >
-                            Contacto
+                            {{ link.label }}
                         </router-link>
                     </li>
                 </ul>
@@ -84,34 +43,34 @@
         </div>
     </nav>
 </template>
-<script>
-import feather from "feather-icons";
-export default {
-    name: "Navbar",
-    data() {
-        return {
-            menuIcon: feather.icons["menu"].toSvg({
-                width: "16",
-                height: "16",
-            }),
-        };
-    },
-};
-</script>
+
 <script setup>
 import { useRoute } from "vue-router";
 import { computed } from "vue";
 
-const logo = "../images/GROB-v2.png";
+//components
+import Icon from "../components/Icon.vue";
+const iconParameters = {
+    width: "16",
+    height: "16",
+};
 
+import logoImg from "../../../public/images/GROB-v2.png";
+
+//get current route
 const route = useRoute();
+const isHome = computed(() => route.path === "/");
+const isAdmin = computed(() => route.path === "/admin");
 
-const homeRoute = computed(() => {
-    return route.path === "/";
-});
-const adminRoute = computed(() => {
-    return route.path === "/admin";
-});
+//navigation links
+const navLinks = [
+    { label: "Servicios", url: "/services" },
+    { label: "Productos", url: "/products" },
+    { label: "Catálogo", url: "/catalogue" },
+    { label: "Nosotros", url: "/about" },
+    { label: "Ubicaciones", url: "/locations" },
+    { label: "Contacto", url: "/contact" },
+];
 </script>
 
 <style scoped>
