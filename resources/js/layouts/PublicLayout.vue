@@ -17,6 +17,10 @@
 <script setup>
 import Header from "./Header.vue";
 import Footer from "./Footer.vue";
+
+import { useRoute } from "vue-router";
+const router = useRoute();
+const homeRoute = router.path === "/";
 </script>
 
 <style scoped>
