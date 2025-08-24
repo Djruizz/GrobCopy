@@ -26,7 +26,6 @@
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav text-uppercase ms-auto custom-link">
                     <li class="nav-item">
-                        <!-- <a class="nav-link" href="/Services">Servicios</a> -->
                         <router-link
                             class="nav-link"
                             to="/services"
@@ -129,8 +128,6 @@ const adminRoute = computed(() => {
     }
     @media (max-width: 338px) {
         .navbar .container {
-            display: flex !important;
-            flex-direction: column !important;
             justify-content: center !important;
         }
     }
