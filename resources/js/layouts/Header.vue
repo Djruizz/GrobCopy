@@ -32,7 +32,7 @@
                     >
                         <router-link
                             class="nav-link"
-                            to="{{ link.url }}"
+                            :to="link.url"
                             exact-active-class="text-primary"
                         >
                             {{ link.label }}
