@@ -2,7 +2,6 @@
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\Api\ServiceController;
 
 /*
 |--------------------------------------------------------------------------
@@ -19,4 +18,6 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-Route::apiResource('/services', ServiceController::class);
+Route::apiResource('/services', \App\Http\Controllers\Api\ServiceController::class);
+Route::apiResource('/categories', \App\Http\Controllers\Api\CategoryController::class);
+Route::apiResource('/families', \App\Http\Controllers\Api\FamilyController::class);
