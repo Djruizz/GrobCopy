@@ -1,38 +1,36 @@
 <template>
-    <div class="container">
-        <HeadComponent :headInfo="headInfo" />
-        <div class="container timeline">
-            <div v-for="(item, index) in timelineItems" :key="index">
-                <div
-                    v-if="!item.is_final"
-                    class="timeline-item"
-                    :class="{
-                        'timeline-start': index === 0,
-                        left: index % 2 === 0,
-                        right: index % 2 !== 0,
-                    }"
-                >
-                    <div class="timeline-img-wrapper">
-                        <img
-                            :src="`/images/about/${item.image}`"
-                            :alt="item.title"
-                            class="timeline-img"
-                        />
-                    </div>
-                    <div class="timeline-content">
-                        <h5>
-                            <strong>{{ item.title }}</strong>
-                        </h5>
-                        <p
-                            v-html="item.description.replace(/\n/g, '<br>')"
-                            class="custom-text"
-                        ></p>
-                    </div>
+    <HeadComponent :headInfo="headInfo" />
+    <div class="container timeline">
+        <div v-for="(item, index) in timelineItems" :key="index">
+            <div
+                v-if="!item.is_final"
+                class="timeline-item"
+                :class="{
+                    'timeline-start': index === 0,
+                    left: index % 2 === 0,
+                    right: index % 2 !== 0,
+                }"
+            >
+                <div class="timeline-img-wrapper">
+                    <img
+                        :src="`/images/about/${item.image}`"
+                        :alt="item.title"
+                        class="timeline-img"
+                    />
                 </div>
-                <div v-else class="timeline-end">
-                    <div class="timeline-end-circle">
-                        <span>{{ item.title }}</span>
-                    </div>
+                <div class="timeline-content">
+                    <h5>
+                        <strong>{{ item.title }}</strong>
+                    </h5>
+                    <p
+                        v-html="item.description.replace(/\n/g, '<br>')"
+                        class="custom-text"
+                    ></p>
+                </div>
+            </div>
+            <div v-else class="timeline-end">
+                <div class="timeline-end-circle">
+                    <span>{{ item.title }}</span>
                 </div>
             </div>
         </div>
@@ -191,4 +189,3 @@ onMounted(async () => {
     }
 }
 </style>
-

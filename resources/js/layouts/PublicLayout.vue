@@ -4,8 +4,8 @@
         <Header/>
 
         <!-- Contenido dinámico según la ruta -->
-        <div :class="{ 'main-content': !isHome }">
-            <div :class="{ container: !isAdminRoute && !isHome}">
+        <div :class="mainContentClass">
+            <div :class="containerClass">
                 <router-view></router-view>
             </div>
         </div>
@@ -24,6 +24,18 @@ import { useRoute } from "vue-router";
 const route = useRoute();
 const isHome = computed(() => route.path === "/");
 const isAdminRoute = computed(() => route.path.startsWith("/admin"));
+const isContactRoute = computed(() => route.path === "/contact");
+
+const mainContentClass = computed(() => {
+    return {
+        'main-content': !isHome.value && !isContactRoute.value 
+    };
+});
+const containerClass = computed(() => {
+    return {
+        'container': !isAdminRoute.value && !isHome.value && !isContactRoute.value
+    };
+});
 </script>
 
 <style scoped>
