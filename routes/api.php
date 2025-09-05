@@ -21,3 +21,4 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 Route::apiResource('/services', \App\Http\Controllers\Api\ServiceController::class);
 Route::apiResource('/categories', \App\Http\Controllers\Api\CategoryController::class);
 Route::apiResource('/families', \App\Http\Controllers\Api\FamilyController::class);
+Route::apiResource('/about', \App\Http\Controllers\Api\TimelineItemController::class);
