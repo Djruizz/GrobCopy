@@ -22,3 +22,4 @@ Route::apiResource('/services', \App\Http\Controllers\Api\ServiceController::cla
 Route::apiResource('/categories', \App\Http\Controllers\Api\CategoryController::class);
 Route::apiResource('/families', \App\Http\Controllers\Api\FamilyController::class);
 Route::apiResource('/about', \App\Http\Controllers\Api\TimelineItemController::class);
+Route::apiResource('/departments', \App\Http\Controllers\Api\DepartmentsController::class);

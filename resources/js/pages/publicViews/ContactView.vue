@@ -2,7 +2,7 @@
     <div class="container-fluid bg-container">
         <HeadComponent :headInfo="headInfo" :whiteTitle="true" />
         <div class="mx-auto" style="max-width: 900px">
-            <form action="post" class="mx-5">
+            <form action="post" class="mx-5" @submit.prevent="submitForm">
                 <div class="row mb-3">
                     <!-- Columna Izquierda -->
                     <div class="col-md-6">
@@ -11,14 +11,14 @@
                                 class="form-select"
                                 name="department"
                                 id="departmentSelect"
-                                v-model="inputContent.departmentId"
+                                v-model="inputContent.department_id"
                             >
                                 <option disabled value="">Departamento</option>
                                 <option
                                     v-for="department in departments"
                                     :value="department.id"
                                 >
-                                    {{ department.name }}
+                                    {{ department.department_name }}
                                 </option>
                             </select>
                             <label for="departmentSelect"
@@ -42,19 +42,17 @@
                                 class="form-select"
                                 name="department"
                                 id="stateSelect"
-                                v-model="inputContent.stateId"
+                                v-model="inputContent.state"
                             >
                                 <option value="" disabled>Estado</option>
                                 <option
                                     v-for="state in states"
-                                    :value="state.id"
+                                    :value="state"
                                 >
-                                    {{ state.name }}
+                                    {{ state }}
                                 </option>
                             </select>
-                            <label for="stateSelect"
-                                >Seleccione Estado</label
-                            >
+                            <label for="stateSelect">Seleccione Estado</label>
                         </div>
 
                         <div class="form-floating mb-3">
@@ -73,6 +71,7 @@
                                 type="email"
                                 id="emailInput"
                                 placeholder="Email"
+                                v-model="inputContent.email"
                             />
                             <label for="emailInput">Email</label>
                         </div>
@@ -82,9 +81,9 @@
                         <div class="form-floating mb-3">
                             <input
                                 class="form-control"
-                                type="number"
+                                type="text"
                                 id="phoneInput"
-                                placeholder="Phone"
+                                placeholder="Telefono"
                                 v-model="inputContent.phone"
                             />
                             <label for="phoneInput">Teléfono</label>
@@ -104,6 +103,7 @@
                 <div class="text-center">
                     <button
                         class="btn btn-primary text-white text-uppercase custom-btn"
+                        type="submit"
                     >
                         Enviar
                     </button>
@@ -115,7 +115,9 @@
 
 <script setup>
 import HeadComponent from "../../components/HeadComponent.vue";
-import { ref } from "vue";
+import { onMounted, ref } from "vue";
+import { sendEmail, fetchDepartments} from "../../api/useContact";
+import {states} from "../../data/states.js";
 
 const headInfo = {
     title: "Contacto",
@@ -123,31 +125,46 @@ const headInfo = {
         "Puede enviarnos sus preguntas, comentarios ó sugerencias en el siguiente formulario, estamos a sus órdenes:",
 };
 
-const departments = [
-    { id: 1, name: "Ventas" },
-    { id: 2, name: "Soporte Técnico" },
-    { id: 3, name: "Facturación" },
-    { id: 4, name: "Recursos Humanos" },
-    { id: 5, name: "Marketing" },
-    { id: 6, name: "Atención al Cliente" },
-];
-const states = [
-    { id: 1, name: "Aguascalientes" },
-    { id: 2, name: "Baja California" },
-    { id: 3, name: "Baja California Sur" },
-    { id: 4, name: "Campeche" },
-    { id: 5, name: "Chiapas" },
-];
+const departments = ref([]);
 
 const inputContent = ref({
-    departmentId: "",
+    department_id: "",
     name: "",
-    stateId: "",
+    state: "",
     city: "",
     email: "",
     phone: "",
     comments: "",
 });
+
+onMounted(async () => {
+    try {
+        departments.value = await fetchDepartments();
+    } catch (error) {
+        console.error("Error fetching departments:", error);
+    }
+});
+
+const submitForm = async () => {
+    try {
+        await sendEmail(inputContent.value);
+        // Reset form fields
+        inputContent.value = {
+            department_id: "",
+            name: "",
+            state: "",
+            city: "",
+            email: "",
+            phone: "",
+            // comments: "",
+        };
+    } catch (error) {
+        console.error("Error sending form:", error);
+        alert("Hubo un error al enviar el formulario. Por favor, inténtelo de nuevo.");
+    }
+
+};
+
 </script>
 
 <style scoped>
