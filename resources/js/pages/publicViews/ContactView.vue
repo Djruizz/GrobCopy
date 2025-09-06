@@ -1,7 +1,7 @@
 <template>
     <div class="container-fluid bg-container">
         <HeadComponent :headInfo="headInfo" :whiteTitle="true" />
-        <div class="mx-auto" style="max-width: 900px">
+        <div class="mx-auto" style="max-width: 1200px">
             <form action="post" class="mx-5" @submit.prevent="submitForm">
                 <div class="row mb-3">
                     <!-- Columna Izquierda -->
