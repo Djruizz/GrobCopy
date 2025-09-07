@@ -12,6 +12,9 @@ export async function sendEmail(data) {
         },
         body: JSON.stringify(data),
     });
+    if (!response.ok) {
+        throw new Error("Failed to send email");
+    }
     return response.json();
 }
 export async function fetchDepartments() {
