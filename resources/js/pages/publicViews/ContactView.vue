@@ -45,10 +45,7 @@
                                 v-model="inputContent.state"
                             >
                                 <option value="" disabled>Estado</option>
-                                <option
-                                    v-for="state in states"
-                                    :value="state"
-                                >
+                                <option v-for="state in states" :value="state">
                                     {{ state }}
                                 </option>
                             </select>
@@ -88,7 +85,7 @@
                             />
                             <label for="phoneInput">Teléfono</label>
                         </div>
-                        <div class="form-floating">
+                        <div class="form-floating mb-3">
                             <textarea
                                 class="form-control"
                                 placeholder="Leave a comment here"
@@ -98,11 +95,18 @@
                             ></textarea>
                             <label for="commentsInput">Commentarios</label>
                         </div>
+                        <div class="d-flex aling-items-center mb-3">
+                            <ReCaptchaComponent
+                                @captchaSuccess="handleCaptcha"
+                                :resetCaptcha="resetCaptcha"
+                            />
+                        </div>
                     </div>
                 </div>
                 <div class="text-center">
                     <button
                         class="btn btn-primary text-white text-uppercase custom-btn"
+                        :class="{ disabled: !canSubmit }"
                         type="submit"
                     >
                         Enviar
@@ -115,9 +119,10 @@
 
 <script setup>
 import HeadComponent from "../../components/HeadComponent.vue";
+import ReCaptchaComponent from "../../components/ReCaptchaComponent.vue";
 import { onMounted, ref } from "vue";
-import { sendEmail, fetchDepartments} from "../../api/useContact";
-import {states} from "../../data/states.js";
+import { sendEmail, fetchDepartments } from "../../api/useContact";
+import { states } from "../../data/states.js";
 
 const headInfo = {
     title: "Contacto",
@@ -137,6 +142,9 @@ const inputContent = ref({
     comments: "",
 });
 
+const canSubmit = ref(false);
+const resetCaptcha = ref(false);
+
 onMounted(async () => {
     try {
         departments.value = await fetchDepartments();
@@ -145,9 +153,19 @@ onMounted(async () => {
     }
 });
 
+const handleCaptcha = (status) => {
+    canSubmit.value = status;
+    if (status) {
+        resetCaptcha.value = false;
+    }
+};
+
 const submitForm = async () => {
     try {
         await sendEmail(inputContent.value);
+        resetCaptcha.value = true;
+        canSubmit.value = false;
+
         // Reset form fields
         inputContent.value = {
             department_id: "",
@@ -156,15 +174,15 @@ const submitForm = async () => {
             city: "",
             email: "",
             phone: "",
-            // comments: "",
+            comments: "",
         };
     } catch (error) {
         console.error("Error sending form:", error);
-        alert("Hubo un error al enviar el formulario. Por favor, inténtelo de nuevo.");
+        alert(
+            "Hubo un error al enviar el formulario. Por favor, inténtelo de nuevo.",
+        );
     }
-
 };
-
 </script>
 
 <style scoped>
