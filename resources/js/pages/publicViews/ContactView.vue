@@ -12,6 +12,7 @@
                                 name="department"
                                 id="departmentSelect"
                                 v-model="inputContent.department_id"
+                                v-if="departments.length > 1"
                             >
                                 <option disabled value="">Departamento</option>
                                 <option
@@ -21,8 +22,17 @@
                                     {{ department.department_name }}
                                 </option>
                             </select>
+                            <input
+                                v-else
+                                type="text"
+                                class="form-control"
+                                id="departmentSelect"
+                                disabled
+                                placeholder="departmentInput"
+                                :value="departments[0]?.department_name"
+                            />
                             <label for="departmentSelect"
-                                >Seleccione departamento</label
+                                >Departamento</label
                             >
                         </div>
 
