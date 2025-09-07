@@ -26,6 +26,9 @@ class ContactController extends Controller
             2 => 'ruizd31100779@gmail.com',
             3 => 'djruizp31@gmail.com'
         ];
+
+        $date = date('d-m-Y H:i:s');
+        $request->merge(['date' => $date]);
         
         $mail = $departmentMails[$request->input('department_id')];
 
