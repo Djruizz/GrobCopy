@@ -166,12 +166,22 @@
                 </div>
             </form>
         </div>
+        <AlertComponent
+            :data="{
+                title: 'Correo enviado!',
+                content: 'Gracias por compartir tus comentarios.',
+            }"
+            icon="mail"
+            :show="showAlert"
+            @hide="hideAlert"
+        ></AlertComponent>
     </div>
 </template>
 
 <script setup>
 import HeadComponent from "../../components/HeadComponent.vue";
 import ReCaptchaComponent from "../../components/ReCaptchaComponent.vue";
+import AlertComponent from "../../components/AlertComponent.vue";
 import { onMounted, ref } from "vue";
 import { sendEmail, fetchDepartments } from "../../api/useContact";
 import { states } from "../../data/states.js";
@@ -188,6 +198,7 @@ const inputContent = ref({});
 const submitted = ref(false);
 const canSubmit = ref(false);
 const resetCaptcha = ref(false);
+const showAlert = ref(false);
 
 const touched = ref({
     department_id: false,
@@ -293,9 +304,17 @@ const submitForm = async () => {
         await sendEmail(inputContent.value);
         resetCaptcha.value = true;
         canSubmit.value = false;
+        handleAlert();
     } catch (error) {
         console.error("Error sending form:", error);
     }
+};
+
+const handleAlert = () => {
+    showAlert.value = true;
+};
+const hideAlert = () => {
+    showAlert.value = false;
 };
 </script>
 
