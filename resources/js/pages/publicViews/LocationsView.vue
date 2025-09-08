@@ -38,13 +38,13 @@
                             :class="
                                 // Center cards if there are 2 or fewer in the group
                                 locations.filter(
-                                    (loc) => loc.group_id === group.id,
+                                    (loc) => loc.location_group_id === group.id,
                                 ).length <= 2
                                     ? 'mx-auto'
                                     : ''
                             "
                             v-for="(location, locIndex) in locations.filter(
-                                (loc) => loc.group_id === group.id,
+                                (loc) => loc.location_group_id === group.id,
                             )"
                             :key="locIndex"
                         >
@@ -79,37 +79,30 @@
                                         <span
                                             v-for="(
                                                 phone, phoneIndex
-                                            ) in location.phone"
+                                            ) in location.phones"
                                             :key="phoneIndex"
                                         >
-                                            {{ phone.trim()
+                                            {{ phone.phone
                                             }}<span
                                                 v-if="
                                                     phoneIndex <
-                                                    location.phone.length - 1
+                                                    location.phones.length - 1
                                                 "
-                                                >,</span
-                                            >
+                                                >,
+                                            </span>
                                         </span>
                                     </p>
                                     <p class="card-text">
-                                        <a href="#" class="custom-a">
-                                            <span
-                                                v-for="(
-                                                    email, emailIndex
-                                                ) in location.email"
-                                                :key="emailIndex"
-                                            >
-                                                {{ email }}
-                                                <span
-                                                    v-if="
-                                                        emailIndex <
-                                                        location.email.length -
-                                                            1
-                                                    "
-                                                    >,
-                                                </span>
-                                            </span>
+                                        <a
+                                            href="#"
+                                            class="custom-a"
+                                            v-for="(
+                                                e, emailIndex
+                                            ) in location.emails"
+                                            :key="emailIndex"
+                                        >
+                                            {{ e.email }}
+                                            <br/>
                                         </a>
                                     </p>
                                 </div>
@@ -145,70 +138,77 @@
 </template>
 
 <script setup>
-import { f } from "feather-icons";
 import HeadComponent from "../../components/HeadComponent.vue";
 import Icon from "../../components/Icon.vue";
-const groups = [
-    {
-        id: 1,
-        name: "Centros de distribución",
-    },
-    // Add more groups as needed
-];
+import { fetchLocations } from "../../api/useLocation";
+import { onMounted, ref } from "vue";
 
-const locations = [
-    {
-        address: {
-            street: "Av. Reforma",
-            number: "123",
-            neighborhood: "Villa Fontana Residencial",
-            zip_code: "06600",
-            city: "Tlajo",
-            state: "CDMX",
-        },
-        sucursal: "Ciudad de México",
-        phone: ["55 1234 5678", "55 8765 4321"],
-        email: ["contacto@empresa.com"],
-        group_id: 1,
-        lat: 19.4326,
-        lng: -99.1332,
-    },
-    // {
-    //     address: "Calle Juárez 456, Guadalajara, Jalisco",
-    //     sucursal: "Jalisco",
-    //     phone: ["+52 33 8765 4321"],
-    //     email: "guadalajara@empresa.com",
-    //     group_id: 1,
-    // },
-    // {
-    //     address: "Blvd. Díaz Ordaz 789, Monterrey, Nuevo León",
-    //     sucursal: "Nuevo León",
-    //     phone: ["+52 81 1122 3344", "+52 81 9988 7766"],
-    //     email: "monterrey@empresa.com",
-    //     group_id: 1,
-    // },
-    // {
-    //     address: "Av. Universidad 101, Puebla, Puebla",
-    //     sucursal: "Puebla",
-    //     phone: ["+52 222 334 5566"],
-    //     email: "puebla@empresa.com",
-    //     group_id: 1,
-    // },
-    // {
-    //     address: "Malecón 505, Veracruz, Veracruz",
-    //     sucursal: "Veracruz",
-    //     phone: ["+52 229 445 6677", "+52 229 998 1122"],
-    //     email: "veracruz@empresa.com",
-    //     group_id: 1,
-    // },
-    // {
-    //     address: "Centro Histórico 202, Mérida, Yucatán",
-    //     sucursal: "Yucatán",
-    //     phone: ["+52 999 332 4455"],
-    //     email: "merida@empresa.com",
-    //     group_id: 1,
-    // },
-];
+const groups = ref([]);
+const locations = ref([]);
+
+onMounted(async () => {
+    try {
+        const response = await fetchLocations();
+        groups.value = response.locationGroups;
+        locations.value = response.locations;
+        console.log(groups.value, locations.value);
+    } catch (err) {
+        console.log("Error al obtener ubicaciones", err);
+    }
+});
+// const locations = [
+//     {
+//         address: {
+//             street: "Av. Reforma",
+//             number: "123",
+//             neighborhood: "Villa Fontana Residencial",
+//             zip_code: "06600",
+//             city: "Tlajo",
+//             state: "CDMX",
+//         },
+//         sucursal: "Ciudad de México",
+//         phone: ["55 1234 5678", "55 8765 4321"],
+//         email: ["contacto@empresa.com"],
+//         group_id: 1,
+//         lat: 19.4326,
+//         lng: -99.1332,
+//     },
+//     // {
+//     //     address: "Calle Juárez 456, Guadalajara, Jalisco",
+//     //     sucursal: "Jalisco",
+//     //     phone: ["+52 33 8765 4321"],
+//     //     email: "guadalajara@empresa.com",
+//     //     group_id: 1,
+//     // },
+//     // {
+//     //     address: "Blvd. Díaz Ordaz 789, Monterrey, Nuevo León",
+//     //     sucursal: "Nuevo León",
+//     //     phone: ["+52 81 1122 3344", "+52 81 9988 7766"],
+//     //     email: "monterrey@empresa.com",
+//     //     group_id: 1,
+//     // },
+//     // {
+//     //     address: "Av. Universidad 101, Puebla, Puebla",
+//     //     sucursal: "Puebla",
+//     //     phone: ["+52 222 334 5566"],
+//     //     email: "puebla@empresa.com",
+//     //     group_id: 1,
+//     // },
+//     // {
+//     //     address: "Malecón 505, Veracruz, Veracruz",
+//     //     sucursal: "Veracruz",
+//     //     phone: ["+52 229 445 6677", "+52 229 998 1122"],
+//     //     email: "veracruz@empresa.com",
+//     //     group_id: 1,
+//     // },
+//     // {
+//     //     address: "Centro Histórico 202, Mérida, Yucatán",
+//     //     sucursal: "Yucatán",
+//     //     phone: ["+52 999 332 4455"],
+//     //     email: "merida@empresa.com",
+//     //     group_id: 1,
+//     // },
+// ];
 
 function openMap(lat, lng) {
     if (!lat || !lng) return;

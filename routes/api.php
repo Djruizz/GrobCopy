@@ -23,3 +23,4 @@ Route::apiResource('/categories', \App\Http\Controllers\Api\CategoryController::
 Route::apiResource('/families', \App\Http\Controllers\Api\FamilyController::class);
 Route::apiResource('/about', \App\Http\Controllers\Api\TimelineItemController::class);
 Route::apiResource('/departments', \App\Http\Controllers\Api\DepartmentsController::class);
+Route::apiResource('/location-groups', \App\Http\Controllers\Api\LocationController::class);
