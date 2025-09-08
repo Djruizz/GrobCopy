@@ -35,7 +35,8 @@
                     <div class="row">
                         <div
                             class="col-md-4 card-group"
-                            :class=" // Center cards if there are 2 or fewer in the group
+                            :class="
+                                // Center cards if there are 2 or fewer in the group
                                 locations.filter(
                                     (loc) => loc.group_id === group.id,
                                 ).length <= 2
@@ -57,51 +58,72 @@
                                     </h5>
                                 </div>
                                 <div class="card-body">
-                                    <p class="card-text">
-                                        {{ location.address }}
-                                    </p>
-                                    <p class="card-text">
+                                    <span class="card-text custom-address">
+                                        <p>
+                                            {{ location.address.street }} #{{
+                                                location.address.number
+                                            }}
+                                        </p>
+                                        <p>
+                                            {{ location.address.neighborhood }}
+                                        </p>
+                                        <p>
+                                            C.P.
+                                            {{ location.address.zip_code }},
+                                            {{ location.address.city }},
+                                            {{ location.address.state }}
+                                        </p>
+                                    </span>
+                                    <p class="card-text mb-2">
+                                        Tel.
                                         <span
                                             v-for="(
                                                 phone, phoneIndex
                                             ) in location.phone"
                                             :key="phoneIndex"
                                         >
-                                            {{ phone }}
-                                            <span
+                                            {{ phone.trim()
+                                            }}<span
                                                 v-if="
                                                     phoneIndex <
                                                     location.phone.length - 1
                                                 "
-                                                >,
-                                            </span>
+                                                >,</span
+                                            >
                                         </span>
                                     </p>
-                                    <a href="#" class="card-text custom-a">
-                                        <span
-                                            v-for="(
-                                                email, emailIndex
-                                            ) in location.email"
-                                            :key="emailIndex"
-                                        >
-                                            {{ email }}
+                                    <p class="card-text">
+                                        <a href="#" class="custom-a">
                                             <span
-                                                v-if="
-                                                    emailIndex <
-                                                    location.email.length - 1
-                                                "
-                                                >,
+                                                v-for="(
+                                                    email, emailIndex
+                                                ) in location.email"
+                                                :key="emailIndex"
+                                            >
+                                                {{ email }}
+                                                <span
+                                                    v-if="
+                                                        emailIndex <
+                                                        location.email.length -
+                                                            1
+                                                    "
+                                                    >,
+                                                </span>
                                             </span>
-                                        </span>
-                                    </a>
+                                        </a>
+                                    </p>
                                 </div>
                                 <div
                                     class="card-footer d-flex justify-content-center"
                                 >
                                     <button
                                         class="btn btn-primary btn-sm py-2 text-dark mx-auto"
-                                        :disabled="!location.lat || !location.lng"
-                                        @click="openMap(location.lat, location.lng)"
+                                        :disabled="
+                                            !location.lat || !location.lng
+                                        "
+                                        @click="
+                                            openMap(location.lat, location.lng)
+                                        "
                                     >
                                         <Icon
                                             name="map-pin"
@@ -123,6 +145,7 @@
 </template>
 
 <script setup>
+import { f } from "feather-icons";
 import HeadComponent from "../../components/HeadComponent.vue";
 import Icon from "../../components/Icon.vue";
 const groups = [
@@ -135,10 +158,16 @@ const groups = [
 
 const locations = [
     {
-        address: "Av. Reforma 123, Ciudad de México, CDMX ",
-
+        address: {
+            street: "Av. Reforma",
+            number: "123",
+            neighborhood: "Villa Fontana Residencial",
+            zip_code: "06600",
+            city: "Tlajo",
+            state: "CDMX",
+        },
         sucursal: "Ciudad de México",
-        phone: ["+52 55 1234 5678", "+52 55 8765 4321"],
+        phone: ["55 1234 5678", "55 8765 4321"],
         email: ["contacto@empresa.com"],
         group_id: 1,
         lat: 19.4326,
@@ -195,5 +224,10 @@ function openMap(lat, lng) {
 }
 .custom-a:hover {
     text-decoration: underline !important;
+}
+
+.custom-address p {
+    margin-bottom: 10px !important;
+    font-size: 15px;
 }
 </style>
