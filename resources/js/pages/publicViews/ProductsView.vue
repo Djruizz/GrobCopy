@@ -29,6 +29,24 @@
 
             <!-- Tab panes -->
             <div class="tab-content mt-3" id="productsTabContent">
+                <div class="input-group mb-3">
+                    <button
+                        class="btn btn-outline-primary disabled"
+                        type="button"
+                        id="searchBtn"
+                    >
+                        <Icon name="search"></Icon>
+                        Buscar
+                    </button>
+                    <input
+                        type="text"
+                        class="form-control"
+                        placeholder=""
+                        v-model="search"
+                        aria-label="Search button"
+                        aria-describedby="searchBtn"
+                    />
+                </div>
                 <div
                     class="tab-pane fade"
                     v-for="category in orderedCategories"
@@ -80,12 +98,13 @@
 <script setup>
 import { ref, computed, onMounted } from "vue";
 import HeadComponent from "../../components/HeadComponent.vue";
-
+import Icon from "../../components/Icon.vue";
 import { fetchCategories, fetchFamilies } from "../../api/useProducts.js";
 
 const categories = ref([]);
 const families = ref([]);
 const activeTab = ref(null);
+
 // Ordena las categorías por el campo 'order'
 const orderedCategories = computed(() =>
     categories.value.slice().sort((a, b) => a.order - b.order),
@@ -105,8 +124,18 @@ onMounted(async () => {
 });
 
 function getFamiliesByCategory(categoryId) {
-    return families.value.filter((family) => family.category_id === categoryId);
+    return filteredFamilies.value.filter(
+        (family) => family.category_id === categoryId,
+    );
 }
+
+const search = ref("");
+const filteredFamilies = computed(() => {
+    if (!search.value) return families.value;
+    return families.value.filter((f) =>
+        f.name.toLowerCase().includes(search.value.toLowerCase()),
+    );
+});
 </script>
 
 <style scoped>

@@ -8,8 +8,14 @@ use App\Models\Family;
 
 class FamilyController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        return response()->json(Family::all());
+        $query = $request->query('q');
+        $families = Family::query()
+            ->when($query, function ($q) use ($query){
+                $q->where('name','like', "%{$query}%");
+            })
+            ->get();
+        return response()->json($families);
     }
 }
