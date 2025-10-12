@@ -1,10 +1,5 @@
 <template>
-    <HeadComponent
-        :headInfo="{
-            title: 'Ubicaciones',
-            subtitle: 'Una sucursal siempre cerca de ti.',
-        }"
-    />
+    <HeadComponent />
     <div class="accordion" id="locationsAccordion">
         <div
             class="accordion-item"
@@ -102,7 +97,7 @@
                                             :key="emailIndex"
                                         >
                                             {{ e.email }}
-                                            <br/>
+                                            <br />
                                         </a>
                                     </p>
                                 </div>
@@ -151,7 +146,7 @@ onMounted(async () => {
         const response = await fetchLocations();
         groups.value = response.locationGroups;
         locations.value = response.locations;
-        console.log(groups.value, locations.value);
+        
     } catch (err) {
         console.log("Error al obtener ubicaciones", err);
     }

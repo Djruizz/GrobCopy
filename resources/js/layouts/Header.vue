@@ -66,7 +66,7 @@ const isAdmin = computed(() => route.path === "/admin");
 const navLinks = [
     { label: "Servicios", url: "/services" },
     { label: "Productos", url: "/products" },
-    { label: "Catálogo", url: "/catalogue" },
+    // { label: "Catálogo", url: "/catalogue" },
     { label: "Nosotros", url: "/about" },
     { label: "Ubicaciones", url: "/locations" },
     { label: "Contacto", url: "/contact" },

@@ -1,6 +1,6 @@
 <template>
     <div class="container-fluid bg-container">
-        <HeadComponent :headInfo="headInfo" :whiteTitle="true" />
+        <HeadComponent/>
         <div class="mx-auto" style="max-width: 1200px">
             <form
                 action="post"
@@ -186,11 +186,6 @@ import { onMounted, ref } from "vue";
 import { sendEmail, fetchDepartments } from "../../api/useContact";
 import { states } from "../../data/states.js";
 
-const headInfo = {
-    title: "Contacto",
-    subtitle:
-        "Puede enviarnos sus preguntas, comentarios ó sugerencias en el siguiente formulario, estamos a sus órdenes:",
-};
 
 const departments = ref([]);
 const inputContent = ref({});

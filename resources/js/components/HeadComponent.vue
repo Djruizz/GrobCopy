@@ -1,23 +1,24 @@
 <template>
     <div class="text-center head-section mb-5 mt-3">
-        <h1 class="text-uppercase" :class="{ 'text-white': whiteTitle }">
-            {{ headInfo.title }}
+        <h1 class="text-uppercase" :class="{ 'text-white': isContactRoute }">
+            {{ currentTitle }}
         </h1>
-        <h3 class="text-primary">{{ headInfo.subtitle }}</h3>
+        <h3 class="text-primary">{{ currentSubtitle }}</h3>
     </div>
 </template>
 
 <script setup>
-defineProps({
-    headInfo: {
-        type: Object,
-        required: true,
-    },
-    whiteTitle: {
-        type: Boolean,
-        default: false,
-    },
-});
+import { useRoute } from "vue-router";
+import {headData} from "../data/headComponentData"
+
+const router = useRoute()
+const isContactRoute = router.path === "/contact"
+
+const currentTitle = headData[router.name]?.title || "Sin título"
+const currentSubtitle = headData[router.name]?.subtitle || "Sin subtitulo"
+
+
+
 </script>
 
 <style scoped>

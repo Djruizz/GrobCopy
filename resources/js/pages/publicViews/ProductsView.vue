@@ -1,5 +1,5 @@
 <template>
-    <HeadComponent :headInfo="headInfo" />
+    <HeadComponent />
     <div class="row">
         <div class="col">
             <!-- Tabs por cada categoria -->
@@ -82,11 +82,6 @@ import { ref, computed, onMounted } from "vue";
 import HeadComponent from "../../components/HeadComponent.vue";
 
 import { fetchCategories, fetchFamilies } from "../../api/useProducts.js";
-
-const headInfo = {
-    title: "Productos",
-    subtitle: "Nuestra Calidad es desarrollada en Equipo Original.",
-};
 
 const categories = ref([]);
 const families = ref([]);

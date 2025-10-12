@@ -1,5 +1,5 @@
 <template>
-    <HeadComponent :head-info="headInfo" />
+    <HeadComponent/>
     <div class="row">
         <div
             class="col-md-4 mb-4"
@@ -33,10 +33,6 @@ import Icon from "../../components/Icon.vue";
 import { fetchServices } from "../../api/useServices";
 import { onMounted, ref } from "vue";
 
-const headInfo = {
-    title: "Servicios",
-    subtitle: "Somos Expertos en Seguridad y Confort",
-};
 
 const iconParameters = {
     color: "white",

@@ -1,5 +1,5 @@
 <template>
-    <HeadComponent :headInfo="headInfo" />
+    <HeadComponent/>
     <div class="container timeline">
         <div v-for="(item, index) in timelineItems" :key="index">
             <div
@@ -42,11 +42,6 @@ import { ref, onMounted } from "vue";
 
 import HeadComponent from "../../components/HeadComponent.vue";
 import { fetchAboutTimelineItems } from "../../api/useAbout.js";
-
-const headInfo = {
-    title: "Nosotros",
-    subtitle: "GRUPO GROVI",
-};
 
 const timelineItems = ref([]);
 
